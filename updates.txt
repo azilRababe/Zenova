@@ -1,0 +1,2 @@
+- improve code readability and performance
+- Error handling

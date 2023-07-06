@@ -9,10 +9,6 @@ import orderRoute from "./routes/orderRoute";
 // import uploadRoute from "./routes/uploadRoute";
 
 import "./utils/mongodb.js";
-// debuging
-console.log(config.PORT); // Accessing the PORT variable
-console.log(config.MONGODB_URL); // Accessing the MONGODB_URL variable
-console.log(config.JWT_SECRET);
 
 const app = express();
 app.use(bodyParser.json());
