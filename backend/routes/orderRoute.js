@@ -1,11 +1,11 @@
-import express from 'express';
-import Order from '../models/orderModel';
-import { isAuth, isAdmin } from '../util';
+import express from "express";
+import Order from "../models/orderModel";
+import { isAuth, isAdmin } from "../utils/util";
 
 const router = express.Router();
 
 router.get("/", isAuth, async (req, res) => {
-  const orders = await Order.find({}).populate('user');
+  const orders = await Order.find({}).populate("user");
   res.send(orders);
 });
 router.get("/mine", isAuth, async (req, res) => {
@@ -18,7 +18,7 @@ router.get("/:id", isAuth, async (req, res) => {
   if (order) {
     res.send(order);
   } else {
-    res.status(404).send("Order Not Found.")
+    res.status(404).send("Order Not Found.");
   }
 });
 
@@ -28,7 +28,7 @@ router.delete("/:id", isAuth, isAdmin, async (req, res) => {
     const deletedOrder = await order.remove();
     res.send(deletedOrder);
   } else {
-    res.status(404).send("Order Not Found.")
+    res.status(404).send("Order Not Found.");
   }
 });
 
@@ -53,17 +53,17 @@ router.put("/:id/pay", isAuth, async (req, res) => {
     order.isPaid = true;
     order.paidAt = Date.now();
     order.payment = {
-      paymentMethod: 'paypal',
+      paymentMethod: "paypal",
       paymentResult: {
         payerID: req.body.payerID,
         orderID: req.body.orderID,
-        paymentID: req.body.paymentID
-      }
-    }
+        paymentID: req.body.paymentID,
+      },
+    };
     const updatedOrder = await order.save();
-    res.send({ message: 'Order Paid.', order: updatedOrder });
+    res.send({ message: "Order Paid.", order: updatedOrder });
   } else {
-    res.status(404).send({ message: 'Order not found.' })
+    res.status(404).send({ message: "Order not found." });
   }
 });
 

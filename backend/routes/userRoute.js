@@ -1,79 +1,138 @@
-import express from 'express';
-import User from '../models/userModel';
-import { getToken, isAuth } from '../util';
+import express from "express";
+import User from "../models/userModel";
+import bcrypt from "bcryptjs";
+import { getToken, isAuth } from "../utils/util";
+import { config } from "dotenv";
 
 const router = express.Router();
 
-router.put('/:id', isAuth, async (req, res) => {
-  const userId = req.params.id;
-  const user = await User.findById(userId);
-  if (user) {
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-    user.password = req.body.password || user.password;
-    const updatedUser = await user.save();
-    res.send({
-      _id: updatedUser.id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
-      token: getToken(updatedUser),
-    });
-  } else {
-    res.status(404).send({ message: 'User Not Found' });
-  }
-});
+/**
+ * Create a new user.
+ * @route POST /api/users/signUp
+ * @param {string} email - The email of the user.
+ * @param {string} password - The password of the user.
+ * @returns {object} A success message if the user is created successfully.
+ * @throws {Error} If the email already exists or an error occurs while saving the user.
+ */
+router.post("/signUp", async (req, res) => {
+  const { name, email, password } = req.body;
+  try {
+    const isUserExists = await User.findOne({ email });
 
-router.post('/signin', async (req, res) => {
-  const signinUser = await User.findOne({
-    email: req.body.email,
-    password: req.body.password,
-  });
-  if (signinUser) {
-    res.send({
-      _id: signinUser.id,
-      name: signinUser.name,
-      email: signinUser.email,
-      isAdmin: signinUser.isAdmin,
-      token: getToken(signinUser),
-    });
-  } else {
-    res.status(401).send({ message: 'Invalid Email or Password.' });
-  }
-});
+    if (isUserExists) {
+      return res
+        .status(409)
+        .json({ warning: "The entered Email already exists!" });
+    }
 
-router.post('/register', async (req, res) => {
-  const user = new User({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-  });
-  const newUser = await user.save();
-  if (newUser) {
-    res.send({
+    const newUser = new User({ name, email, password });
+    await newUser.save();
+
+    res.status(201).json({
       _id: newUser.id,
       name: newUser.name,
       email: newUser.email,
       isAdmin: newUser.isAdmin,
       token: getToken(newUser),
     });
-  } else {
-    res.status(401).send({ message: 'Invalid User Data.' });
+
+    sendEmail(email, "Welcome to iCinema", "Welcome to iCinema");
+  } catch (error) {
+    res.status(500).json({ error: "Invalid User Data." });
   }
 });
 
-router.get('/createadmin', async (req, res) => {
+/**
+ * Authenticate a user.
+ * @route POST /api/users/signIn
+ * @param {string} email - The email of the user.
+ * @param {string} password - The password of the user.
+ * @returns {object} An access token and user information if authentication is successful.
+ * @throws {Error} If the email or password is incorrect, or an error occurs during authentication.
+ */
+router.post("/signIn", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const signinUser = await User.findOne({ email });
+
+    if (!signinUser) {
+      return res
+        .status(401)
+        .json({ warning: "Username or Password Incorrect" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, signinUser.password);
+
+    if (!isPasswordValid) {
+      return res
+        .status(401)
+        .json({ warning: "Username or Password Incorrect" });
+    }
+
+    res.status(202).json({
+      _id: signinUser.id,
+      name: signinUser.name,
+      email: signinUser.email,
+      isAdmin: signinUser.isAdmin,
+      token: getToken(signinUser),
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+/**
+ * Update a user by their ID.
+ * @route PATCH /api/users/:id
+ * @param {string} userId - The ID of the user to update.
+ * @returns {object} A success message and the updated user object.
+ * @throws {Error} If the user is not found, an error occurs while updating them, or validation fails.
+ */
+router.patch("/:id", isAuth, async (req, res) => {
+  try {
+    const updateUser = await User.findByIdAndUpdate(req.params.userId, {
+      new: true,
+    });
+
+    if (!updateUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({
+      message: "User updated successfully",
+      user: updateUser,
+    });
+  } catch (error) {
+    res.status(500).json({ error: `Failed to update user: ${error.message}` });
+  }
+});
+
+/**
+ * Create an admin user.
+ * @route POST /api/users/createadmin
+ * @returns {object} The created admin user's email and name.
+ * @throws {Error} If an error occurs while creating the admin user.
+ */
+router.post("/createadmin", async (req, res) => {
+  const hashedPassword = await bcrypt.hash(config.ADMIN_PASSWORD, 10);
   try {
     const user = new User({
-      name: 'Basir',
-      email: 'admin@example.com',
-      password: '1234',
+      name: config.ADMIN_NAME,
+      email: config.ADMIN_EMAIL,
+      password: hashedPassword,
       isAdmin: true,
     });
-    const newUser = await user.save();
-    res.send(newUser);
+
+    const savedAdmin = await user.save();
+    res.status(201).json({
+      message: "Admin Created Successfully",
+      email: savedAdmin.email,
+      name: savedAdmin.name,
+    });
   } catch (error) {
-    res.send({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
