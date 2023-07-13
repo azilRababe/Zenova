@@ -1,29 +1,23 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Name is required."],
+      required: true,
     },
     email: {
       type: String,
-      required: [true, "Email is required."],
+      required: true,
       unique: true,
-      index: true,
-      dropDups: true,
     },
     password: {
       type: String,
-      required: [true, "Password is required."],
+      required: true,
     },
-    address: {
-      type: String,
-    },
-    phoneNumber: {
-      type: String,
-      required: [true, "Phone number is required."],
-    },
+    address: { type: String },
+    phoneNumber: { type: String },
     isAdmin: {
       type: Boolean,
       default: false,

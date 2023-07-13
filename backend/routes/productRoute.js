@@ -1,6 +1,6 @@
 import express from "express";
-import Product from "../models/productModel";
-import { isAuth, isAdmin } from "../utils/util";
+import Product from "../models/productModel.js";
+import { isAuth, isAdmin } from "../utils/util.js";
 
 const router = express.Router();
 
@@ -14,25 +14,26 @@ const router = express.Router();
  * @throws {Error} If an error occurs while retrieving the products.
  */
 router.get("/", async (req, res) => {
-  const category = req.query.category ? { category: req.query.category } : {};
+  try {
+    const { category, searchKeyword, sortOrder } = req.query;
 
-  const searchKeyword = req.query.searchKeyword
-    ? {
-        name: {
-          $regex: req.query.searchKeyword,
-          $options: "i",
-        },
-      }
-    : {};
-  const sortOrder = req.query.sortOrder
-    ? req.query.sortOrder === "lowest"
-      ? { price: 1 }
-      : { price: -1 }
-    : { _id: -1 };
-  const products = await Product.find({ ...category, ...searchKeyword }).sort(
-    sortOrder
-  );
-  res.send(products);
+    const categoryQuery = category ? { category } : {};
+
+    const searchQuery = searchKeyword
+      ? { name: { $regex: searchKeyword, $options: "i" } }
+      : {};
+
+    const sortQuery = sortOrder === "lowest" ? { price: 1 } : { price: -1 };
+
+    const products = await Product.find({
+      ...categoryQuery,
+      ...searchQuery,
+    }).sort(sortQuery);
+
+    res.send(products);
+  } catch (error) {
+    res.status(500).send({ error: "Internal Server Error" });
+  }
 });
 
 /**
@@ -73,11 +74,7 @@ router.post("/:productId/reviews", isAuth, async (req, res) => {
     const product = await Product.findById(req.params.productId);
 
     if (product) {
-      const review = {
-        name,
-        rating: Number(rating),
-        comment,
-      };
+      const review = { name, rating, comment };
 
       product.reviews.push(review);
 
@@ -99,7 +96,7 @@ router.post("/:productId/reviews", isAuth, async (req, res) => {
       res.status(404).send({ warning: "Product Not Found" });
     }
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
     res.status(500).send({ error: "Internal Server Error." });
   }
 });
@@ -132,7 +129,7 @@ router.patch("/:productId", isAuth, isAdmin, async (req, res) => {
     }
     return res.status(500).send({ error: "Error in Updating Product." });
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
     return res.status(500).send({ error: error.message });
   }
 });
@@ -146,7 +143,9 @@ router.patch("/:productId", isAuth, isAdmin, async (req, res) => {
  */
 router.delete("/:productId", isAuth, isAdmin, async (req, res) => {
   try {
-    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+    const deletedProduct = await Product.findByIdAndDelete(
+      req.params.productId
+    );
 
     if (deletedProduct) {
       res.send({ message: "Product Deleted" });

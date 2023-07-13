@@ -1,7 +1,7 @@
 import express from "express";
-import User from "../models/userModel";
+import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
-import { getToken, isAuth } from "../utils/util";
+import { getToken, isAuth } from "../utils/util.js";
 import { config } from "dotenv";
 
 const router = express.Router();
@@ -15,9 +15,8 @@ const router = express.Router();
  * @throws {Error} If the email already exists or an error occurs while saving the user.
  */
 router.post("/signUp", async (req, res) => {
-  const { name, email, password } = req.body;
   try {
-    const isUserExists = await User.findOne({ email });
+    const isUserExists = await User.findOne({ email: req.body.email });
 
     if (isUserExists) {
       return res
@@ -25,7 +24,7 @@ router.post("/signUp", async (req, res) => {
         .json({ warning: "The entered Email already exists!" });
     }
 
-    const newUser = new User({ name, email, password });
+    const newUser = new User(req.body);
     await newUser.save();
 
     res.status(201).json({
@@ -35,9 +34,8 @@ router.post("/signUp", async (req, res) => {
       isAdmin: newUser.isAdmin,
       token: getToken(newUser),
     });
-
-    sendEmail(email, "Welcome to iCinema", "Welcome to iCinema");
   } catch (error) {
+    console.log(error.message);
     res.status(500).json({ error: "Invalid User Data." });
   }
 });
@@ -90,11 +88,15 @@ router.post("/signIn", async (req, res) => {
  * @returns {object} A success message and the updated user object.
  * @throws {Error} If the user is not found, an error occurs while updating them, or validation fails.
  */
-router.patch("/:id", isAuth, async (req, res) => {
+router.patch("/:userId", isAuth, async (req, res) => {
   try {
-    const updateUser = await User.findByIdAndUpdate(req.params.userId, {
-      new: true,
-    });
+    const updateUser = await User.findByIdAndUpdate(
+      { _id: req.params.userId },
+      req.body,
+      {
+        new: true,
+      }
+    );
 
     if (!updateUser) {
       return res.status(404).json({ error: "User not found" });
@@ -105,6 +107,7 @@ router.patch("/:id", isAuth, async (req, res) => {
       user: updateUser,
     });
   } catch (error) {
+    console.log(error.message);
     res.status(500).json({ error: `Failed to update user: ${error.message}` });
   }
 });

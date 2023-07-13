@@ -1,6 +1,6 @@
 import express from "express";
-import Order from "../models/orderModel";
-import { isAuth, isAdmin } from "../utils/util";
+import Order from "../models/orderModel.js";
+import { isAuth, isAdmin } from "../utils/util.js";
 
 const router = express.Router();
 
@@ -68,7 +68,7 @@ router.delete("/:orderId", isAuth, isAdmin, async (req, res) => {
     const order = await Order.findOneAndDelete({ _id: req.params.orderId });
     if (order) {
       res.send({
-        message: "order Deleted successfuly ",
+        message: "Order Deleted Successfuly ",
         deletedOrder,
       });
     }
@@ -106,23 +106,42 @@ router.post("/", isAuth, async (req, res) => {
   }
 });
 
-router.put("/:id/pay", isAuth, async (req, res) => {
-  const order = await Order.findById(req.params.id);
-  if (order) {
-    order.isPaid = true;
-    order.paidAt = Date.now();
-    order.payment = {
-      paymentMethod: "paypal",
-      paymentResult: {
-        payerID: req.body.payerID,
-        orderID: req.body.orderID,
-        paymentID: req.body.paymentID,
-      },
-    };
-    const updatedOrder = await order.save();
-    res.send({ message: "Order Paid.", order: updatedOrder });
-  } else {
-    res.status(404).send({ message: "Order not found." });
+/**
+ * Update the payment status of an order.
+ * @route PATCH /api/orders/:id/pay
+ * @authentication This route requires authentication.
+ * @param {string} id.path.required - The ID of the order to update.
+ * @bodyparam {string} payerID.body.required - The ID of the payer for the payment.
+ * @bodyparam {string} orderID.body.required - The ID of the order.
+ * @bodyparam {string} paymentID.body.required - The ID of the payment.
+ * @returns {object} A success message and the updated order.
+ * @throws {404} If the order is not found.
+ */
+router.patch("/:id/pay", isAuth, async (req, res) => {
+  const { payerID, orderID, paymentID } = req.body;
+
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (order) {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+      order.payment = {
+        paymentMethod: "paypal",
+        paymentResult: { payerID, orderID, paymentID },
+      };
+
+      const updatedOrder = await order.save();
+
+      res.send({
+        message: "Your Payment Was Successfully Processed",
+        order: updatedOrder,
+      });
+    } else {
+      res.status(404).send({ warning: "Order Not Found." });
+    }
+  } catch (error) {
+    res.status(500).send({ error: "Error Updating Payment.", error: error });
   }
 });
 
