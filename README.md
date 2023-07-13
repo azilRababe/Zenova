@@ -34,7 +34,3 @@ To get started with the project, follow these steps:
 ### Contributions
 
 Contributions to this project are welcome. If you encounter any issues or have suggestions for improvement, feel free to open an issue or submit a pull request.
-
----
-
-Feel free to customize this description based on the specific features and technologies used in your e-commerce website.
