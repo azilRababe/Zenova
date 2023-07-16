@@ -2,7 +2,7 @@ import express from "express";
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import { getToken, isAuth } from "../utils/util.js";
-import { config } from "dotenv";
+import config from "../utils/config.js";
 
 const router = express.Router();
 

@@ -1,13 +1,14 @@
 import { faker } from "@faker-js/faker";
 import orderModel from "../models/orderModel.js";
+import mongoose from "mongoose";
 
 // Generate a random order item object
 function generateOrderItem() {
   return {
     name: faker.commerce.productName(),
-    qty: faker.internet.number({ min: 1, max: 10 }),
-    image: faker.image.food(),
-    price: faker.internet.number({ min: 10, max: 100 }),
+    qty: faker.number.int({ min: 1, max: 10 }),
+    image: faker.image.urlLoremFlickr({ category: "food" }),
+    price: faker.number.int({ min: 10, max: 100 }),
     product: mongoose.Types.ObjectId(),
   };
 }
@@ -35,11 +36,10 @@ function generatePayment() {
 
 // Generate a random order object
 function generateOrder() {
-  const orderItems = [];
-  const numItems = faker.number.int({ min: 1, max: 5 });
-  for (let i = 0; i < numItems; i++) {
-    orderItems.push(generateOrderItem());
-  }
+  const orderItems = Array.from(
+    { length: faker.number.int({ min: 1, max: 5 }) },
+    generateOrderItem
+  );
 
   return {
     user: mongoose.Types.ObjectId(),
@@ -57,24 +57,20 @@ function generateOrder() {
   };
 }
 
-// Generate an array of seed data
-function generateSeedData(count) {
-  const seedData = [];
-  for (let i = 0; i < count; i++) {
-    seedData.push(generateOrder());
+async function seedDatabase() {
+  try {
+    const numberOfOrdersToSeed = 10;
+    const seedData = Array.from(
+      { length: numberOfOrdersToSeed },
+      generateOrder
+    );
+
+    await orderModel.insertMany(seedData);
+    console.log("Seed data inserted successfully");
+    mongoose.connection.close();
+  } catch (error) {
+    console.error("Error seeding the database:", error);
   }
-  return seedData;
 }
 
-// Generate 10 sample orders
-const seedData = generateSeedData(10);
-
-// Insert the seed data into the database
-orderModel
-  .insertMany(seedData)
-  .then(() => {
-    console.log("Seed data inserted successfully");
-  })
-  .catch((err) => {
-    console.error("Error inserting seed data:", err);
-  });
+seedDatabase();

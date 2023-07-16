@@ -1,22 +1,26 @@
 import { faker } from "@faker-js/faker";
 import productModel from "../models/productModel.js";
 
+import "../utils/mongodb.js";
+
+// Generate a random rating between 0 and 5
+function generateRating() {
+  return faker.number.int({ min: 0, max: 5 });
+}
+
 // Generate a random review object
 function generateReview() {
   return {
     name: faker.person.fullName(),
-    rating: faker.number.int({ min: 0, max: 5 }),
+    rating: generateRating(),
     comment: faker.lorem.paragraph(),
   };
 }
 
 // Generate a random product object
 function generateProduct() {
-  const reviews = [];
   const numReviews = faker.number.int({ min: 0, max: 10 });
-  for (let i = 0; i < numReviews; i++) {
-    reviews.push(generateReview());
-  }
+  const reviews = Array.from({ length: numReviews }, generateReview);
 
   return {
     name: faker.commerce.productName(),
@@ -24,37 +28,33 @@ function generateProduct() {
     brand: faker.company.name(),
     price: faker.number.int({ min: 10, max: 100 }),
     category: faker.helpers.arrayElement([
-      "Electronics",
-      "Clothing",
-      "Home",
-      "Beauty",
+      "Food",
+      "Cosmetic Products",
+      "Vegan Products",
+      "Organic Products",
+      "Other",
     ]),
     countInStock: faker.number.int({ min: 0, max: 100 }),
     description: faker.lorem.paragraph(),
-    rating: faker.number.int({ min: 0, max: 5 }),
+    rating: generateRating(),
     numReviews: numReviews,
     reviews: reviews,
   };
 }
 
-// Generate an array of seed data
-function generateSeedData(count) {
-  const seedData = [];
-  for (let i = 0; i < count; i++) {
-    seedData.push(generateProduct());
+async function seedDatabase() {
+  try {
+    const numberOfProductsToSeed = 10;
+    const seedData = Array.from(
+      { length: numberOfProductsToSeed },
+      generateProduct
+    );
+
+    await productModel.insertMany(seedData);
+    console.log("Seed data inserted successfully");
+  } catch (error) {
+    console.error("Error seeding the database:", error.message);
   }
-  return seedData;
 }
 
-// Generate 10 sample products
-const seedData = generateSeedData(10);
-
-// Insert the seed data into the database
-productModel
-  .insertMany(seedData)
-  .then(() => {
-    console.log("Seed data inserted successfully");
-  })
-  .catch((err) => {
-    console.log("Error inserting seed data:", err.message);
-  });
+seedDatabase();

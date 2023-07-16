@@ -1,6 +1,7 @@
 import express from "express";
 import path from "path";
 import bodyParser from "body-parser";
+
 import config from "./utils/config.js";
 
 import userRoute from "./routes/userRoute.js";
@@ -31,6 +32,11 @@ app.get("/api/config/paypal", (req, res) => {
 // app.get("*", (req, res) => {
 //   res.sendFile(path.join(`${__dirname}/../frontend/build/index.html`));
 // });
+
+// Seeds
+// import "./seeds/productSeeds.js";
+// import './seeds/userSeeds.js';
+// import "./seeds/orderSeeds.js";
 
 app.listen(config.PORT, () => {
   console.log(`App running on port ${config.PORT}`);

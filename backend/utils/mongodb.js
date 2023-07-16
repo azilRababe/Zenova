@@ -1,10 +1,17 @@
 import mongoose from "mongoose";
+
 import config from "./config.js";
 
-mongoose
-  .connect(config.MONGODB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("MongoDb connected ..."))
-  .catch((error) => console.log(error.message));
+async function connectToDatabase() {
+  try {
+    await mongoose.connect(config.MONGODB_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("MongoDb connected ...");
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error.message);
+  }
+}
+
+connectToDatabase();

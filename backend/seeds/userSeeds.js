@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import User from "../models/userModel.js";
+import "../utils/mongodb.js";
 
 // Generate a random user object
 function generateUser() {
@@ -22,14 +23,16 @@ function generateSeedData(count) {
   return seedData;
 }
 
-// Generate 10 sample users
-const seedData = generateSeedData(5);
+async function seedDatabase() {
+  try {
+    const numberOfUsersToSeed = 10;
+    const seedData = generateSeedData(numberOfUsersToSeed);
 
-// Insert the seed data into the database
-User.insertMany(seedData)
-  .then(() => {
+    await User.insertMany(seedData);
     console.log("Seed data inserted successfully");
-  })
-  .catch((err) => {
-    console.log("Error inserting seed data:", err.message);
-  });
+  } catch (error) {
+    console.error("Error seeding the database:", error.message);
+  }
+}
+
+seedDatabase();
