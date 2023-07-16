@@ -52,7 +52,7 @@ router.post("/signIn", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const signinUser = await User.findOne({ $eq: email });
+    const signinUser = await User.findOne({ email: { $eq: email } });
 
     if (!signinUser) {
       return res
@@ -92,7 +92,7 @@ router.patch("/:userId", isAuth, async (req, res) => {
   try {
     const updateUser = await User.findByIdAndUpdate(
       { _id: req.params.userId },
-      { $set: req.body },
+      { $eq: req.body },
       {
         new: true,
       }
