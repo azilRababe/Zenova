@@ -16,7 +16,7 @@ const router = express.Router();
  */
 router.post("/signUp", async (req, res) => {
   try {
-    const isUserExists = await User.findOne({ email: req.body.email });
+    const isUserExists = await User.findOne({ $eq: email });
 
     if (isUserExists) {
       return res
@@ -52,7 +52,7 @@ router.post("/signIn", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const signinUser = await User.findOne({ email });
+    const signinUser = await User.findOne({ $eq: email });
 
     if (!signinUser) {
       return res
@@ -92,7 +92,7 @@ router.patch("/:userId", isAuth, async (req, res) => {
   try {
     const updateUser = await User.findByIdAndUpdate(
       { _id: req.params.userId },
-      req.body,
+      { $set: req.body },
       {
         new: true,
       }

@@ -119,7 +119,7 @@ router.patch("/:productId", isAuth, isAdmin, async (req, res) => {
   try {
     const updateProduct = await Product.findByIdAndUpdate(
       req.params.productId,
-      req.body,
+      { $set: req.body },
       { new: true }
     );
     if (updateProduct) {
