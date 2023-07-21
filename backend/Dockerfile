@@ -20,7 +20,7 @@ COPY . .
 # Copy the .babelrc file to the container
 COPY .babelrc ./
 
-EXPOSE 8080
+EXPOSE 5000
 
 # Run the API on Nodemon
 CMD ["npm", "start"] 
