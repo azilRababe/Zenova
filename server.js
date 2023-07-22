@@ -5,25 +5,24 @@ import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 
-import config from "./utils/config.js";
+import config from "./backend/utils/config.js";
 
-import userRoute from "./routes/userRoute.js";
-import productRoute from "./routes/productRoute.js";
-import orderRoute from "./routes/orderRoute.js";
+import userRoute from "./backend/routes/userRoute.js";
+import productRoute from "./backend/routes/productRoute.js";
+import orderRoute from "./backend/routes/orderRoute.js";
 // import uploadRoute from "./routes/uploadRoute";
 
-import "./utils/mongodb.js";
+import "./backend/utils/mongodb.js";
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.set("trust proxy", false);
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  windowMs: 15 * 60 * 1000,
+  max: 100,
 });
 
 app.use(limiter);

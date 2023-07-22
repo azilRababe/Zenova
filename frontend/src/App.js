@@ -1,94 +1,57 @@
 import React from "react";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 import "./App.css";
-import HomeScreen from "./screens/HomeScreen";
-import ProductScreen from "./screens/ProductScreen";
-import CartScreen from "./screens/CartScreen";
-import SigninScreen from "./screens/SigninScreen";
-import { useSelector } from "react-redux";
-import RegisterScreen from "./screens/RegisterScreen";
-import ProductsScreen from "./screens/ProductsScreen";
-import ShippingScreen from "./screens/ShippingScreen";
-import PaymentScreen from "./screens/PaymentScreen";
-import PlaceOrderScreen from "./screens/PlaceOrderScreen";
-import OrderScreen from "./screens/OrderScreen";
-import ProfileScreen from "./screens/ProfileScreen";
-import OrdersScreen from "./screens/OrdersScreen";
+import { HomeScreen } from "./pages/HomeScreen";
+import { ProductScreen } from "./pages/ProductScreen";
+import { CartScreen } from "./pages/CartScreen";
+import { SigninScreen } from "./pages/SigninScreen";
+import { RegisterScreen } from "./pages/RegisterScreen";
+import { ProductsScreen } from "./pages/ProductsScreen";
+import { ShippingScreen } from "./pages/ShippingScreen";
+import { PaymentScreen } from "./pages/PaymentScreen";
+import { PlaceOrderScreen } from "./pages/PlaceOrderScreen";
+import { OrderScreen } from "./pages/OrderScreen";
+import { ProfileScreen } from "./pages/ProfileScreen";
+import { OrdersScreen } from "./pages/OrdersScreen";
+import Typography from "@mui/material/Typography";
+import { Navigation } from "./components/Navigation";
 
-function App() {
-  const userSignin = useSelector((state) => state.userSignin);
-  const { userInfo } = userSignin;
+import { BsFillBalloonHeartFill } from "react-icons/bs";
 
-  const openMenu = () => {
-    document.querySelector(".sidebar").classList.add("open");
-  };
-  const closeMenu = () => {
-    document.querySelector(".sidebar").classList.remove("open");
-  };
+import Divider from "@mui/material/Divider";
+import { Box } from "@mui/material";
+
+export const App = () => {
   return (
     <BrowserRouter>
-      <div className="grid-container">
-        <header className="header">
-          <div className="brand">
-            <button onClick={openMenu}>&#9776;</button>
-            <Link to="/">Zenova</Link>
-          </div>
-          <div className="header-links">
-            <a href="cart.html">Cart</a>
-            {userInfo ? (
-              <Link to="/profile">{userInfo.name}</Link>
-            ) : (
-              <Link to="/signin">Sign In</Link>
-            )}
-            {userInfo && userInfo.isAdmin && (
-              <div className="dropdown">
-                <a href="#">Admin</a>
-                <ul className="dropdown-content">
-                  <li>
-                    <Link to="/orders">Orders</Link>
-                    <Link to="/products">Products</Link>
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
-        </header>
-        <aside className="sidebar">
-          <h3>Shopping Categories</h3>
-          <button className="sidebar-close-button" onClick={closeMenu}>
-            x
-          </button>
-          <ul className="categories">
-            <li>
-              <Link to="/category/Pants">Pants</Link>
-            </li>
+      <Navigation />
+      <main className="main">
+        <div className="content">
+          <Route path="/orders" component={OrdersScreen} />
+          <Route path="/profile" component={ProfileScreen} />
+          <Route path="/order/:id" component={OrderScreen} />
+          <Route path="/products" component={ProductsScreen} />
+          <Route path="/shipping" component={ShippingScreen} />
+          <Route path="/payment" component={PaymentScreen} />
+          <Route path="/placeorder" component={PlaceOrderScreen} />
+          <Route path="/signin" component={SigninScreen} />
+          <Route path="/register" component={RegisterScreen} />
+          <Route path="/product/:id" component={ProductScreen} />
+          <Route path="/cart/:id?" component={CartScreen} />
+          <Route path="/category/:id" component={HomeScreen} />
+          <Route path="/" exact={true} component={HomeScreen} />
+        </div>
+      </main>
 
-            <li>
-              <Link to="/category/Shirts">Shirts</Link>
-            </li>
-          </ul>
-        </aside>
-        <main className="main">
-          <div className="content">
-            <Route path="/orders" component={OrdersScreen} />
-            <Route path="/profile" component={ProfileScreen} />
-            <Route path="/order/:id" component={OrderScreen} />
-            <Route path="/products" component={ProductsScreen} />
-            <Route path="/shipping" component={ShippingScreen} />
-            <Route path="/payment" component={PaymentScreen} />
-            <Route path="/placeorder" component={PlaceOrderScreen} />
-            <Route path="/signin" component={SigninScreen} />
-            <Route path="/register" component={RegisterScreen} />
-            <Route path="/product/:id" component={ProductScreen} />
-            <Route path="/cart/:id?" component={CartScreen} />
-            <Route path="/category/:id" component={HomeScreen} />
-            <Route path="/" exact={true} component={HomeScreen} />
-          </div>
-        </main>
-        <footer className="footer">All right reserved.</footer>
-      </div>
+      <Divider variant="middle" textAlign="center" />
+
+      <Box sx={{ flexGrow: 1, my: 2 }}>
+        <Typography variant="h5" gutterBottom align="center">
+          Made With
+          <BsFillBalloonHeartFill color="red" />
+          And Purrfection
+        </Typography>
+      </Box>
     </BrowserRouter>
   );
-}
-
-export default App;
+};

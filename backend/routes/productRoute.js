@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
       ? { name: { $regex: searchKeyword, $options: "i" } }
       : {};
 
-    const sortQuery = sortOrder === "lowest" ? { price: 1 } : { price: -1 };
+    const sortQuery = sortOrder === "lowest" ? { price: -1 } : { price: 1 };
 
     const products = await Product.find({
       ...categoryQuery,

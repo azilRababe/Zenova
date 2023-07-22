@@ -23,8 +23,8 @@ function generateProduct() {
   const reviews = Array.from({ length: numReviews }, generateReview);
 
   return {
-    name: faker.commerce.productName(),
-    image: faker.image.urlLoremFlickr({ category: "food" }),
+    name: faker.lorem.words(2),
+    image: faker.image.urlLoremFlickr({ category: "cats" }),
     brand: faker.company.name(),
     price: faker.number.int({ min: 10, max: 100 }),
     category: faker.helpers.arrayElement([
@@ -44,12 +44,13 @@ function generateProduct() {
 
 async function seedDatabase() {
   try {
-    const numberOfProductsToSeed = 10;
+    const numberOfProductsToSeed = 20;
     const seedData = Array.from(
       { length: numberOfProductsToSeed },
       generateProduct
     );
 
+    await productModel.deleteMany();
     await productModel.insertMany(seedData);
     console.log("Seed data inserted successfully");
   } catch (error) {

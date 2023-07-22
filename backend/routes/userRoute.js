@@ -92,7 +92,7 @@ router.patch("/:userId", isAuth, async (req, res) => {
   try {
     const updateUser = await User.findByIdAndUpdate(
       { _id: req.params.userId },
-      { $eq: req.body },
+      { updateUser: { $eq: req.body } },
       {
         new: true,
       }

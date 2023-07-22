@@ -59,14 +59,15 @@ function generateOrder() {
 
 async function seedDatabase() {
   try {
-    const numberOfOrdersToSeed = 10;
+    const numberOfOrdersToSeed = 20;
     const seedData = Array.from(
       { length: numberOfOrdersToSeed },
       generateOrder
     );
 
+    await orderModel.deleteMany();
     await orderModel.insertMany(seedData);
-    console.log("Seed data inserted successfully");
+    console.log("Order data inserted successfully");
     mongoose.connection.close();
   } catch (error) {
     console.error("Error seeding the database:", error);
