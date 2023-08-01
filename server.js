@@ -47,7 +47,7 @@ app.get("/api/config/paypal", (req, res) => {
 // });
 
 // Seeds
-// import "./seeds/productSeeds.js";
+// import "./backend/seeds/productSeeds.js";
 // import './seeds/userSeeds.js';
 // import "./seeds/orderSeeds.js";
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { detailsProduct, saveProductReview } from "../actions/productActions";
 import { Rating } from "../components/Rating";
@@ -17,6 +17,7 @@ export const ProductScreen = (props) => {
   const { success: productSaveSuccess } = productReviewSave;
   const dispatch = useDispatch();
 
+  const { id } = useParams();
   useEffect(() => {
     if (productSaveSuccess) {
       alert("Review submitted successfully.");
@@ -24,7 +25,7 @@ export const ProductScreen = (props) => {
       setComment("");
       dispatch({ type: PRODUCT_REVIEW_SAVE_RESET });
     }
-    dispatch(detailsProduct(props.match.params.id));
+    dispatch(detailsProduct(id));
     return () => {
       //
     };
@@ -33,7 +34,7 @@ export const ProductScreen = (props) => {
     e.preventDefault();
     // dispatch actions
     dispatch(
-      saveProductReview(props.match.params.id, {
+      saveProductReview(id, {
         name: userInfo.name,
         rating: rating,
         comment: comment,
@@ -41,7 +42,7 @@ export const ProductScreen = (props) => {
     );
   };
   const handleAddToCart = () => {
-    props.history.push("/cart/" + props.match.params.id + "?qty=" + qty);
+    props.history.push("/cart/" + id + "?qty=" + qty);
   };
 
   return (
@@ -55,6 +56,8 @@ export const ProductScreen = (props) => {
         <div>{error} </div>
       ) : (
         <>
+          <div className="flex justify-between"></div>
+
           <div className="details">
             <div className="details-image">
               <img src={product.image} alt="product"></img>

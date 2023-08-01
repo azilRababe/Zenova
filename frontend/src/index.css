@@ -1,18 +1,20 @@
-/* @import url("https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@1,300&family=Poppins&display=swap"); */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html {
-  font-size: 62.5%; /* 16px * 62.5 = 10px = 1rem */
+  /* font-size: 62.5%; 16px * 62.5 = 10px = 1rem */
+  font-size: 14px;
   box-sizing: border-box;
 }
 body {
-  /* font-family: "Chivo Mono", monospace;
-  font-family: "Poppins", sans-serif; */
-  font-size: 1.6rem;
-  background-color: #f5f5f5;
+  /* font: 1.6rem Helvetica; */
+  font-size: 14px;
   height: 100vh;
   margin: 0;
 }
 button {
-  font-size: 1.6rem;
+  /* font-size: 1.6rem; */
 }
 .full-width {
   width: 100%;
@@ -32,34 +34,34 @@ button {
 }
 .header {
   grid-area: header;
-  background-color: #00bfa5;
-  color: #333333;
+  background-color: #203040;
+  color: #ffffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
 }
 .brand a {
-  color: #333333;
+  color: #ffffff;
   font-size: 3rem;
   font-weight: bold;
   text-decoration: none;
 }
 .header-links a {
-  color: #333333;
+  color: #ffffff;
   text-decoration: none;
   padding: 1rem;
 }
 .header-links a:hover {
-  color: #ff4081;
+  color: #ff8000;
 }
 .main {
   grid-area: main;
 }
 .footer {
   grid-area: footer;
-  background-color: #00bfa5;
-  color: #333333;
+  background-color: #203040;
+  color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -68,7 +70,7 @@ a {
   text-decoration: none;
 }
 a:hover {
-  color: #ff4081;
+  color: #ff8000;
 }
 /* Home Screen */
 .products {
@@ -144,7 +146,7 @@ a > .rating > span:last-child {
   padding: 0.5rem;
   background: none;
   border: none;
-  color: #142f0a;
+  color: #ffffff;
   cursor: pointer;
 }
 .sidebar {

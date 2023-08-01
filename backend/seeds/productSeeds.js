@@ -24,7 +24,7 @@ function generateProduct() {
 
   return {
     name: faker.lorem.words(2),
-    image: faker.image.urlLoremFlickr({ category: "cats" }),
+    image: faker.image.urlLoremFlickr({ category: "food" }),
     brand: faker.company.name(),
     price: faker.number.int({ min: 10, max: 100 }),
     category: faker.helpers.arrayElement([
