@@ -14,9 +14,10 @@ const router = express.Router();
  * @returns {object} A success message if the user is created successfully.
  * @throws {Error} If the email already exists or an error occurs while saving the user.
  */
-router.post("/signUp", async (req, res) => {
+router.post("/register", async (req, res) => {
+  const { name, email, password } = req.body;
   try {
-    const isUserExists = await User.findOne({ $eq: email });
+    const isUserExists = await User.findOne({ email });
 
     if (isUserExists) {
       return res
@@ -24,7 +25,7 @@ router.post("/signUp", async (req, res) => {
         .json({ warning: "The entered Email already exists!" });
     }
 
-    const newUser = new User(req.body);
+    const newUser = new User({ name, email, password });
     await newUser.save();
 
     res.status(201).json({
@@ -48,7 +49,7 @@ router.post("/signUp", async (req, res) => {
  * @returns {object} An access token and user information if authentication is successful.
  * @throws {Error} If the email or password is incorrect, or an error occurs during authentication.
  */
-router.post("/signIn", async (req, res) => {
+router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
 
   try {

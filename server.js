@@ -48,8 +48,8 @@ app.get("/api/config/paypal", (req, res) => {
 
 // Seeds
 // import "./backend/seeds/productSeeds.js";
-// import './seeds/userSeeds.js';
-// import "./seeds/orderSeeds.js";
+// import './backend/seeds/userSeeds.js';
+// import "./backend/seeds/orderSeeds.js";
 
 app.listen(config.PORT, () => {
   console.log(`App running on port ${config.PORT}`);

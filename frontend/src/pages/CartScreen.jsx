@@ -1,29 +1,55 @@
 import React, { useEffect } from "react";
 import { addToCart, removeFromCart } from "../actions/cartActions";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 
-export const CartScreen = (props) => {
+export const CartScreen = () => {
+  // const cart = useSelector((state) => state.cart);
+
+  // const { cartItems } = cart;
+
+  // const productId = props.match.params.id;
+
+  // const qty = props.location.search
+  //   ? Number(props.location.search.split("=")[1])
+  //   : 1;
+  // const dispatch = useDispatch();
+  // const removeFromCartHandler = (productId) => {
+  //   dispatch(removeFromCart(productId));
+  // };
+  // useEffect(() => {
+  //   if (productId) {
+  //     dispatch(addToCart(productId, qty));
+  //   }
+  // }, []);
+
+  // const checkoutHandler = () => {
+  //   props.history.push("/signin?redirect=shipping");
+  // };
+  const { id } = useParams();
+  const location = useLocation();
+  const Navigate = useNavigate();
+
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
-
   const { cartItems } = cart;
 
-  const productId = props.match.params.id;
-  const qty = props.location.search
-    ? Number(props.location.search.split("=")[1])
+  const qty = new URLSearchParams(location.search).get("qty")
+    ? Number(new URLSearchParams(location.search).get("qty"))
     : 1;
-  const dispatch = useDispatch();
+
   const removeFromCartHandler = (productId) => {
     dispatch(removeFromCart(productId));
   };
+
   useEffect(() => {
-    if (productId) {
-      dispatch(addToCart(productId, qty));
+    if (id) {
+      dispatch(addToCart(id, qty));
     }
-  }, []);
+  }, [dispatch, id, qty]);
 
   const checkoutHandler = () => {
-    props.history.push("/signin?redirect=shipping");
+    Navigate("/signin?redirect=shipping");
   };
 
   return (

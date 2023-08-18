@@ -1,25 +1,55 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { detailsOrder, payOrder } from "../actions/orderActions";
 import { PaypalButton } from "../components/PaypalButton";
 
-export const OrderScreen = (props) => {
+export const OrderScreen = () => {
+  // const orderPay = useSelector((state) => state.orderPay);
+  // const {
+  //   loading: loadingPay,
+  //   success: successPay,
+  //   error: errorPay,
+  // } = orderPay;
+
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   if (successPay) {
+  //     props.history.push("/profile");
+  //   } else {
+  //     dispatch(detailsOrder(props.match.params.id));
+  //   }
+  //   return () => {};
+  // }, [successPay]);
+
+  // const handleSuccessPayment = (paymentResult) => {
+  //   dispatch(payOrder(order, paymentResult));
+  // };
+
+  // const orderDetails = useSelector((state) => state.orderDetails);
+  // const { loading, order, error } = orderDetails;
+  const { id } = useParams();
+  const Navigate = useNavigate();
+
   const orderPay = useSelector((state) => state.orderPay);
   const {
     loading: loadingPay,
     success: successPay,
     error: errorPay,
   } = orderPay;
+
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (successPay) {
-      props.history.push("/profile");
+      Navigate("/profile");
     } else {
-      dispatch(detailsOrder(props.match.params.id));
+      dispatch(detailsOrder(id));
     }
-    return () => {};
-  }, [successPay]);
+    return () => {
+      // Clean up if needed
+    };
+  }, [dispatch, id, successPay]);
 
   const handleSuccessPayment = (paymentResult) => {
     dispatch(payOrder(order, paymentResult));

@@ -16,29 +16,30 @@ import { OrderScreen } from "./pages/OrderScreen";
 import { ProfileScreen } from "./pages/ProfileScreen";
 import { OrdersScreen } from "./pages/OrdersScreen";
 
-import { Navigation } from "./components/Navigation";
-import { Footer } from "./components/Footer";
-
 export const App = () => {
   return (
     <BrowserRouter>
-      <Navigation />
       <Routes>
+        {/* undone */}
         <Route path="/orders" element={<OrdersScreen />} />
+        {/* done */}
         <Route path="/profile" element={<ProfileScreen />} />
         <Route path="/order/:id" element={<OrderScreen />} />
+        {/* done */}
         <Route path="/products" element={<ProductsScreen />} />
+        {/* done */}
         <Route path="/shipping" element={<ShippingScreen />} />
         <Route path="/payment" element={<PaymentScreen />} />
         <Route path="/placeorder" element={<PlaceOrderScreen />} />
         <Route path="/signin" element={<SigninScreen />} />
+        {/* done */}
         <Route path="/register" element={<RegisterScreen />} />
+        {/* done*/}
         <Route path="/product/:id" element={<ProductScreen />} />
         <Route path="/cart/:id?" element={<CartScreen />} />
         <Route path="/category/:id" element={<HomeScreen />} />
         <Route path="/" exact={true} element={<HomeScreen />} />
       </Routes>
-      <Footer />
     </BrowserRouter>
   );
 };

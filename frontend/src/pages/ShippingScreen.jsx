@@ -1,76 +1,148 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { saveShipping } from "../actions/cartActions";
-import { CheckoutSteps } from "../components/CheckoutSteps";
+import { useNavigate } from "react-router-dom";
 
-export const ShippingScreen = (props) => {
+import { Navigation } from "../components/Navigation";
+import { Stepper } from "../components/Stepper";
+
+export const ShippingScreen = () => {
+  const Navigate = useNavigate();
+
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [country, setCountry] = useState("");
+  const [firstname, set_firstname] = useState("");
+  const [lastname, set_lastname] = useState("");
 
   const dispatch = useDispatch();
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(saveShipping({ address, city, postalCode, country }));
-    props.history.push("payment");
+    dispatch(
+      saveShipping({ address, city, postalCode, country, firstname, lastname })
+    );
+    Navigate("payment");
   };
   return (
-    <div>
-      <CheckoutSteps step1 step2></CheckoutSteps>
-      <div className="form">
-        <form onSubmit={submitHandler}>
-          <ul className="form-container">
-            <li>
-              <h2>Shipping</h2>
-            </li>
+    <>
+      <Navigation />
+      <div className="bg-light h-screen">
+        <Stepper />
+        <div className="container mx-auto">
+          <form
+            class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2"
+            onSubmit={submitHandler}
+          >
+            <div class="-mx-3 md:flex mb-6">
+              <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                <label
+                  class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                  for="grid-first-name"
+                >
+                  First Name
+                </label>
+                <input
+                  required
+                  class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3"
+                  id="grid-first-name"
+                  type="text"
+                  placeholder="Jane"
+                  onChange={(e) => set_firstname(e.target.value)}
+                />
+              </div>
+              <div class="md:w-1/2 px-3">
+                <label
+                  class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                  for="grid-last-name"
+                >
+                  Last Name
+                </label>
+                <input
+                  required
+                  class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
+                  id="grid-last-name"
+                  type="text"
+                  placeholder="Doe"
+                  onChange={(e) => set_lastname(e.target.value)}
+                />
+              </div>
+            </div>
 
-            <li>
-              <label htmlFor="address">Address</label>
-              <input
-                type="text"
-                name="address"
-                id="address"
-                onChange={(e) => setAddress(e.target.value)}
-              ></input>
-            </li>
-            <li>
-              <label htmlFor="city">City</label>
-              <input
-                type="text"
-                name="city"
-                id="city"
-                onChange={(e) => setCity(e.target.value)}
-              ></input>
-            </li>
-            <li>
-              <label htmlFor="postalCode">Postal Code</label>
-              <input
-                type="text"
-                name="postalCode"
-                id="postalCode"
-                onChange={(e) => setPostalCode(e.target.value)}
-              ></input>
-            </li>
-            <li>
-              <label htmlFor="country">Country</label>
-              <input
-                type="text"
-                name="country"
-                id="country"
-                onChange={(e) => setCountry(e.target.value)}
-              ></input>
-            </li>
-
-            <li>
-              <button type="submit" className="button primary">
-                Continue
-              </button>
-            </li>
-          </ul>
-        </form>
+            <div class="-mx-3 md:flex mb-2">
+              <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                <label
+                  class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                  for="address"
+                >
+                  Address
+                </label>
+                <input
+                  required
+                  class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
+                  id="address"
+                  type="text"
+                  placeholder="123 Main St"
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </div>
+              <div class="md:w-1/2 px-3">
+                <label
+                  class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                  for="city"
+                >
+                  City
+                </label>
+                <div class="relative">
+                  <input
+                    required
+                    class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded"
+                    id="city"
+                    placeholder="Albuquerque"
+                    onChange={(e) => setCity(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div class="md:w-1/2 px-3">
+                <label
+                  class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                  for="postalCode"
+                >
+                  Postal code
+                </label>
+                <input
+                  required
+                  class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
+                  id="postalCode"
+                  type="text"
+                  placeholder="90210"
+                  onChange={(e) => setPostalCode(e.target.value)}
+                />
+              </div>
+              <div class="md:w-1/2 px-3">
+                <label
+                  class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                  for="Country"
+                >
+                  Country
+                </label>
+                <input
+                  required
+                  class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
+                  id="Country"
+                  type="text"
+                  placeholder="United States"
+                  onChange={(e) => setCountry(e.target.value)}
+                />
+              </div>
+            </div>
+            <button type="submit" className="button mt-10">
+              Next
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };

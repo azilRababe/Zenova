@@ -44,7 +44,7 @@ function generateProduct() {
 
 async function seedDatabase() {
   try {
-    const numberOfProductsToSeed = 20;
+    const numberOfProductsToSeed = 10;
     const seedData = Array.from(
       { length: numberOfProductsToSeed },
       generateProduct

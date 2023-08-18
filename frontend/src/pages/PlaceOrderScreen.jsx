@@ -1,20 +1,18 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CheckoutSteps } from "../components/CheckoutSteps";
 import { createOrder } from "../actions/orderActions";
 
-export const PlaceOrderScreen = (props) => {
+export const PlaceOrderScreen = () => {
+  const Navigate = useNavigate();
+
   const cart = useSelector((state) => state.cart);
   const orderCreate = useSelector((state) => state.orderCreate);
   const { loading, success, error, order } = orderCreate;
 
   const { cartItems, shipping, payment } = cart;
-  if (!shipping.address) {
-    props.history.push("/shipping");
-  } else if (!payment.paymentMethod) {
-    props.history.push("/payment");
-  }
+
   const itemsPrice = cartItems.reduce((a, c) => a + c.price * c.qty, 0);
   const shippingPrice = itemsPrice > 100 ? 0 : 10;
   const taxPrice = 0.15 * itemsPrice;
@@ -38,9 +36,15 @@ export const PlaceOrderScreen = (props) => {
   };
   useEffect(() => {
     if (success) {
-      props.history.push("/order/" + order._id);
+      Navigate("/order/" + order._id);
     }
-  }, [success]);
+  }, [success, order._id, Navigate]);
+
+  if (!shipping.address) {
+    Navigate("/shipping");
+  } else if (!payment.paymentMethod) {
+    Navigate("/payment");
+  }
 
   return (
     <div>
