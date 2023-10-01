@@ -39,12 +39,12 @@ app.get("/api/config/paypal", (req, res) => {
 });
 
 // app.use("/uploads", express.static(path.join(__dirname, "/../uploads")));
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+app.use(express.static(path.join(__dirname, "../frontend/build")));
 
-// app.use(express.static(path.join(__dirname, "/../frontend/build")));
-
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(`${__dirname}/../frontend/build/index.html`));
-// });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(`${__dirname}/../frontend/build/index.html`));
+});
 
 // Seeds
 // import "./backend/seeds/productSeeds.js";

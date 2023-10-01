@@ -4,7 +4,7 @@ import config from "./config.js";
 
 async function connectToDatabase() {
   try {
-    await mongoose.connect(config.MONGODB_URL, {
+    mongoose.connect(config.MONGODB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
