@@ -4,6 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { detailsProduct, saveProductReview } from "../actions/productActions";
 import { PRODUCT_REVIEW_SAVE_RESET } from "../constants/productConstants";
 
+import { Navigation } from "../components/Navigation";
+import { Footer } from "../components/Footer";
+
 export const ProductScreen = () => {
   const Navigate = useNavigate();
   const [qty, setQty] = useState(1);
@@ -47,6 +50,7 @@ export const ProductScreen = () => {
 
   return (
     <>
+      <Navigation />
       <div>
         {loading ? (
           <div>Loading...</div>
@@ -54,7 +58,7 @@ export const ProductScreen = () => {
           <div>{error} </div>
         ) : (
           <>
-            <div class="bg-light p-6 shadow-md md:p-10 lg:px-16 xl:px-20">
+            <div class="bg-gray-100 p-6 shadow-md md:p-10 lg:px-16 xl:px-20">
               <h1 class="mb-4 text-3xl font-semibold">{product.name}</h1>
               <div class="mb-6 flex items-center">
                 <div class="flex items-center">
@@ -98,7 +102,7 @@ export const ProductScreen = () => {
                 <div class="mb-8">
                   <h2 class="mb-4 text-2xl font-semibold">Customer Reviews</h2>
                   {!product.reviews.length && <div>There is no review</div>}
-                  <div class="space-y-6">
+                  <div class="grid grid-cols-2 gap-5">
                     {/* <!-- Review Card 1 --> */}
                     {product.reviews.map((review) => (
                       <div
@@ -131,7 +135,7 @@ export const ProductScreen = () => {
                 <h3 class="text-xl font-semibold mb-3">Write a Review</h3>
                 {/* Add Review */}
                 {userInfo ? (
-                  <div class="bg-light shadow-md p-6 md:p-10 lg:px-16 xl:px-20">
+                  <div class="bg-gray-100 p-6 md:p-10 lg:px-16 xl:px-20">
                     <div class="mb-8">
                       <div class="bg-white rounded-lg p-4 md:p-6 shadow-md">
                         <h3 class="text-xl font-semibold mb-3">
@@ -202,6 +206,7 @@ export const ProductScreen = () => {
           </>
         )}
       </div>
+      <Footer />
     </>
   );
 };

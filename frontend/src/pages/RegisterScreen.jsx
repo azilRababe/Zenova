@@ -40,8 +40,7 @@ export const RegisterScreen = () => {
   };
   return (
     <>
-      <Navigation />
-      <div class="flex justify-center items-center min-h-screen bg-light">
+      <div class="flex justify-center items-center min-h-screen bg-gray-100">
         <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
           <h2 class="text-2xl font-semibold mb-6">Sign Up</h2>
           <form onSubmit={submitHandler}>

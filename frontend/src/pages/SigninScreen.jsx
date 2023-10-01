@@ -76,7 +76,7 @@ export const SigninScreen = (props) => {
           </button>
         </form>
         <p class="text-gray-600 text-sm mt-4 text-center">
-          Don't have an account?
+          Don't have an account?{" "}
           <a href="/register" class="text-blue-500 hover:underline">
             Sign Up
           </a>

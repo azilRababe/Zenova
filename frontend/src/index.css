@@ -10,36 +10,3 @@ body {
   font-size: 14px;
   margin: 0;
 }
-
-/* Rating */
-.rating span {
-  color: #ffb901;
-  font-size: 1.8rem;
-  margin: 0.1rem;
-}
-.rating span:last-child {
-  color: #444444;
-  font-size: 1.4rem;
-}
-a > .rating > span:last-child {
-  color: #0000ff;
-}
-
-/* Checkout Steps */
-
-.checkout-steps {
-  display: flex;
-  justify-content: space-between;
-  width: 40rem;
-  margin: 1rem auto;
-}
-.checkout-steps > div {
-  border-top: 0.3rem #c0c0c0 solid;
-  color: #c0c0c0;
-  flex: 1 1;
-  padding-top: 1rem;
-}
-.checkout-steps > div.active {
-  border-top: 0.3rem #f08000 solid;
-  color: #f08000;
-}

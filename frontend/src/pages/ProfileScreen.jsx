@@ -152,7 +152,7 @@ export const ProfileScreen = () => {
           </div>
         </aside>
 
-        <div class="p-4 sm:ml-64 bg-dark h-screen">
+        <div class="p-4 sm:ml-64 bg-gray-100 h-screen">
           <div class="p-4 ">
             <div class="grid grid-cols-1 mb-4">
               <div class="flex items-center justify-center h-24  font-extrabold ">
@@ -163,12 +163,12 @@ export const ProfileScreen = () => {
             </div>
             <div class="flex flex-col items-center justify-center h-48 mb-4 rounded bg-gray-50">
               <p class="text-2xl text-gray-400 ">Orders</p>
-              <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+              <div className="relative overflow-x-auto ">
                 {loadingOrders ? (
                   <div className=" text-red-400 font-bold">Loading...</div>
                 ) : errorOrders ? (
                   <div className=" text-red-400 font-bold">
-                    {"No Orders Found ..."}
+                    <small>No Orders Found ...</small>
                   </div>
                 ) : (
                   <table className="w-full text-sm text-left text-gray-500">

@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 
 import { Navigation } from "../components/Navigation";
 import { Stepper } from "../components/Stepper";
+import { Footer } from "../components/Footer";
+
+import { LiaShippingFastSolid } from "react-icons/lia";
 
 export const ShippingScreen = () => {
   const Navigate = useNavigate();
@@ -23,18 +26,29 @@ export const ShippingScreen = () => {
     dispatch(
       saveShipping({ address, city, postalCode, country, firstname, lastname })
     );
-    Navigate("payment");
+    Navigate("/payment");
   };
   return (
     <>
       <Navigation />
-      <div className="bg-light h-screen">
-        <Stepper />
-        <div className="container mx-auto">
-          <form
-            class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2"
-            onSubmit={submitHandler}
-          >
+      <hr />
+      {/* <Stepper />
+      <hr /> */}
+      <div className="min-w-screen min-h-screen bg-gray-100 flex items-center justify-center px-5 pb-10 pt-16">
+        <div className="w-full mx-auto rounded-lg bg-white shadow-lg p-5 text-gray-700 max-w-2xl">
+          <div class="w-full pt-1 pb-5">
+            <div class="bg-indigo-500 text-white overflow-hidden rounded-full w-20 h-20 -mt-16 mx-auto shadow-lg flex justify-center items-center">
+              <i class="mdi mdi-credit-card-outline text-3xl">
+                <LiaShippingFastSolid />
+              </i>
+            </div>
+          </div>
+          <div class="mb-10">
+            <h1 class="text-center font-bold text-xl uppercase">
+              Secure shipping info
+            </h1>
+          </div>
+          <form class="w-full pt-1 pb-5" onSubmit={submitHandler}>
             <div class="-mx-3 md:flex mb-6">
               <div class="md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
@@ -44,7 +58,6 @@ export const ShippingScreen = () => {
                   First Name
                 </label>
                 <input
-                  required
                   class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3"
                   id="grid-first-name"
                   type="text"
@@ -60,7 +73,6 @@ export const ShippingScreen = () => {
                   Last Name
                 </label>
                 <input
-                  required
                   class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
                   id="grid-last-name"
                   type="text"
@@ -79,7 +91,6 @@ export const ShippingScreen = () => {
                   Address
                 </label>
                 <input
-                  required
                   class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
                   id="address"
                   type="text"
@@ -96,7 +107,6 @@ export const ShippingScreen = () => {
                 </label>
                 <div class="relative">
                   <input
-                    required
                     class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded"
                     id="city"
                     placeholder="Albuquerque"
@@ -112,7 +122,6 @@ export const ShippingScreen = () => {
                   Postal code
                 </label>
                 <input
-                  required
                   class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
                   id="postalCode"
                   type="text"
@@ -128,7 +137,6 @@ export const ShippingScreen = () => {
                   Country
                 </label>
                 <input
-                  required
                   class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
                   id="Country"
                   type="text"
@@ -137,12 +145,15 @@ export const ShippingScreen = () => {
                 />
               </div>
             </div>
-            <button type="submit" className="button mt-10">
-              Next
-            </button>
+            <div className="mt-10">
+              <button class="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold">
+                <i class="mdi mdi-lock-outline mr-1"></i> Continue to payment
+              </button>
+            </div>
           </form>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

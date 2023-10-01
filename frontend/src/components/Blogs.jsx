@@ -3,8 +3,8 @@ import React from "react";
 export const Blogs = () => {
   return (
     <div
-      class="flex items-center justify-center min-h-full flex-wrap gap-5 py-20 mt-20 from-[#8E735B] via-[#6BBB69] to-[#4A4A4A] bg-gradient-to-br
-      "
+      class="flex items-center justify-center min-h-full flex-wrap gap-5 py-20 mt-20 bg-cover
+       "
     >
       <div class="p-4 items-center justify-center w-[680px] rounded-xl group sm:flex space-x-6 bg-white bg-opacity-50 shadow-xl hover:rounded-2xl">
         <img

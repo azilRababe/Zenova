@@ -24,7 +24,7 @@ function generateProduct() {
 
   return {
     name: faker.lorem.words(2),
-    image: faker.image.urlLoremFlickr({ category: "food" }),
+    image: faker.image.urlLoremFlickr({ category: "nature" }),
     brand: faker.company.name(),
     price: faker.number.int({ min: 10, max: 100 }),
     category: faker.helpers.arrayElement([
@@ -44,13 +44,13 @@ function generateProduct() {
 
 async function seedDatabase() {
   try {
-    const numberOfProductsToSeed = 10;
+    const numberOfProductsToSeed = 20;
     const seedData = Array.from(
       { length: numberOfProductsToSeed },
       generateProduct
     );
 
-    await productModel.deleteMany();
+    // await productModel.deleteMany();
     await productModel.insertMany(seedData);
     console.log("Seed data inserted successfully");
   } catch (error) {
