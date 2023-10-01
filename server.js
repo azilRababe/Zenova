@@ -39,11 +39,13 @@ app.get("/api/config/paypal", (req, res) => {
 });
 
 // app.use("/uploads", express.static(path.join(__dirname, "/../uploads")));
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
-app.use(express.static(path.join(__dirname, "../frontend/build")));
 
+// Serve static files from the 'build' folder
+app.use(express.static(path.join(__dirname, "build")));
+
+// Serve your React app on all routes
 app.get("*", (req, res) => {
-  res.sendFile(path.join(`${__dirname}/../frontend/build/index.html`));
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 // Seeds
